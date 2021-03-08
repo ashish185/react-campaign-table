@@ -1,4 +1,3 @@
-import { act } from "@testing-library/react";
 import { getFormattedDate } from "../utility-functions";
 import {
   FETCH_DATA,

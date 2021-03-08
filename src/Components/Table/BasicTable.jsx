@@ -12,6 +12,7 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import "../../Components/Table/basic-table.css";
 import { getFormattedDate } from '../../utility-functions.js';
+import ImagesGroupCell from '../ImagesGroupCell.jsx';
 
 
 const useStyles = makeStyles({
@@ -20,17 +21,35 @@ const useStyles = makeStyles({
   },
 });
 
-export const CellImages = ({ pathAndNameArr }) => {
+export const CellImages = ({ pathAndNameArr, rowIndex }) => {
+  const handleIconClic2 = (e, index, obj) => {
+    console.log(index, obj);
+    if (obj.name === Constants.SCHEDULE_AGAIN) {
+      console.log(obj.name, rowIndex);
+    }
+
+  }
   return (
     pathAndNameArr && <span className={"images-group"}>
-      {pathAndNameArr.map(obj => <div className="image-with-label"><img className={"margin-right"} src={obj.path}
-        alt={'csv_report_scheduleagain'}
-      /><span>{obj.name}</span></div>)}
+      {pathAndNameArr.map((obj, index) =>
+        <div key={obj.path} className="image-with-label" >
+          <img
+            onClick={(e) => handleIconClic2(e, index, obj)}
+            className={"margin-right"}
+            src={obj.path}
+            alt={'csv_report_scheduleagain'}
+          />
+          <span>
+            {obj.name}
+          </span>
+        </div>
+      )
+      }
     </span>
   )
 }
 
-export default function BasicTable({data}) {
+export default function BasicTable({ data }) {
   const classes = useStyles();
   const [arrData, setArrData] = useState(data)
   useEffect(() => {
@@ -46,8 +65,14 @@ export default function BasicTable({data}) {
       }];
       return el;
     }))
-    console.log(data);
-  }, [])
+  }, [arrData])
+  const handleIconClick = (e, index, obj) => {
+    console.log(e, index, obj);
+    /*  if(obj.name===Constants.SCHEDULE_AGAIN){
+       console.log(obj.name);
+     } */
+
+  }
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="simple table">
@@ -60,18 +85,30 @@ export default function BasicTable({data}) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {arrData.map(row =>{
-              const timeObj=getFormattedDate(row.createdOn);
-              return <TableRow key={row.name}>
+          {arrData.map((row, rowIndx) => {
+            const timeObj = getFormattedDate(row.createdOn);
+            return <TableRow key={row.name}>
               <TableCell component="th" scope="row">
                 <div>{timeObj.campaign_date}</div>
                 <div>{timeObj.timeDiffString}</div>
               </TableCell>
               <TableCell align="left"><img alt="game_icon" src={row["image_url"]}></img></TableCell>
-              <TableCell align="left"><img alt="price_icon" src={row["price_img_url"]} className={"margin-right"} />{Constants.VIEW_PRICING}</TableCell>
-              {row["actions_images_url"] && <TableCell align="left"><CellImages pathAndNameArr={row["actions_images_url"]} /></TableCell>}
+              <TableCell align="left">
+                <img
+                  alt="price_icon"
+                  src={row["price_img_url"]}
+                  className={"margin-right"}
+                  onClick={(e) => handleIconClick(e, row)}
+                />
+                {Constants.VIEW_PRICING}
+              </TableCell>
+              {row["actions_images_url"] &&
+                <TableCell align="left">
+                  <ImagesGroupCell rowIndex={rowIndx} pathAndNameArr={row["actions_images_url"]} />
+                </TableCell>
+              }
             </TableRow>
-          }   
+          }
           )}
         </TableBody>
       </Table>

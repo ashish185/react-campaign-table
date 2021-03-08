@@ -2,7 +2,6 @@ import React from 'react';
 import DemoTabs from '../Components/DemoTabs';
 import { Constants } from '../string-constants';
 import { useEffect } from 'react';
-import { getFormattedDate } from '../utility-functions';
 import { connect } from 'react-redux';
 import { setData } from '../Store/actions';
 const data1=[

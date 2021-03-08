@@ -5,7 +5,6 @@ export const getFormattedDate = (timeStamp) => {
     const campaign_date = new Date(timeStamp);
     const todayDate= new Date();
     var diff_in_time = todayDate.getTime() - campaign_date.getTime(); 
-    let tD = `${monthNames[todayDate.getMonth()].substring(0, 3)} ${todayDate.getFullYear()},${todayDate.getDate()}`;
     let cd = `${monthNames[campaign_date.getMonth()].substring(0, 3)} ${campaign_date.getFullYear()}, ${campaign_date.getDate()}`;
     var daysDiff =Math.round(diff_in_time / (1000 * 3600 * 24)); 
     let str=daysDiff;
