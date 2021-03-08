@@ -20,18 +20,18 @@ function mapDispatchToProps(dispatch) {
 }
 
 function ImagesGroupCell({pathAndNameArr,rowIndex}){
-    const [showCalender, setShowCalender] = useState(false)
+   /*  const [showCalender, setShowCalender] = useState(false)
     const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:11:54'));
 
     const handleDateChange = (date) => {
       setSelectedDate(date);
-    };
+    }; */
   
     const handleIconClic2 = (e, index, obj) => {
       console.log(index, obj);
        if(obj.name===Constants.SCHEDULE_AGAIN){
          console.log(obj.name,rowIndex);
-         setShowCalender(true);
+         //setShowCalender(true);
        }
   
     }
