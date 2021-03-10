@@ -1,4 +1,4 @@
-import {SET_MODAL_SHOW_UNSHOW_STATE, SET_DELETE_MODAL_SHOW_UNSHOW_STATE,SET_MARK_AS_UPDATE_SHOW_UNSHOW_STATE,FETCH_DATA} from './actions-constants';
+import {UPDATE_TIMESTAMP, SET_DELETE_MODAL_SHOW_UNSHOW_STATE,SET_MARK_AS_UPDATE_SHOW_UNSHOW_STATE,FETCH_DATA} from './actions-constants';
 export const setData=(data)=>{
     return {
         type: FETCH_DATA,
@@ -7,7 +7,7 @@ export const setData=(data)=>{
 }
 export const setShowState=(showState)=>{
     return {
-        type:SET_MODAL_SHOW_UNSHOW_STATE,
+        type:UPDATE_TIMESTAMP,
         payload: showState
     }
 }

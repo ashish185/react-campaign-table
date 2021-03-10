@@ -1,7 +1,7 @@
+const monthNames = ["January", "February", "March", "April", "May", "June",
+"July", "August", "September", "October", "November", "December"
+];
 export const getFormattedDate = (timeStamp) => {
-    const monthNames = ["January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-    ];
     const campaign_date = new Date(timeStamp);
     const todayDate= new Date();
     var diff_in_time = todayDate.getTime() - campaign_date.getTime(); 
@@ -12,7 +12,7 @@ export const getFormattedDate = (timeStamp) => {
         str = str+" days ago";
     } 
     else if(daysDiff<0){
-        str = Math.abs(daysDiff)+" days ago";
+        str = Math.abs(daysDiff)+" days ahead";
     }
     const compDateAndDiff= { daysDiff:daysDiff,timeDiffString:str, campaign_date:cd }
     return compDateAndDiff;

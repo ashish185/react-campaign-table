@@ -1,28 +1,9 @@
 import { getFormattedDate } from "../utility-functions";
 import {
   FETCH_DATA,
-  FORM_SUB_SUCC,
-  FORM_SUB_FAIL,
-  SET_MODAL_SHOW_UNSHOW_STATE,
-  SET_DELETE_MODAL_SHOW_UNSHOW_STATE,
-  SET_MARK_AS_UPDATE_SHOW_UNSHOW_STATE
+  UPDATE_TIMESTAMP,
 } from "./actions-constants";
-/* const tableData = [
-  {
-    id: 1,
-    updated_at: "2019-06-12T12:11:39.127842Z",
-    created_at: "2019-06-12T12:11:39.127901Z",
-    first_name: "Nilesh",
-    last_name: "Agarwal",
-    mobile: "9871028111",
-    email: "abc@gmail.com",
-    location_type: "City",
-    location_string: "India",
-    status: "Created",
-    communication: null,
-    tags: null,
-  },
-]; */
+
 const intialState = {
   tableData: [],
   formRes: null,
@@ -35,6 +16,7 @@ const intialState = {
   upcoming_events:[],
   past_events:[]
 };
+
 const campaignReducer = (state = intialState, action) => {
   switch (action.type) {
     case FETCH_DATA:
@@ -61,36 +43,127 @@ const campaignReducer = (state = intialState, action) => {
         upcoming_events:upcoming_events,
         past_events:past_events
       };
-    case FORM_SUB_SUCC: {
-      return {
-        ...state,
-        formRes: action.payload,
-        showModal: action.payload ? false : true,
-      };
-    }
-    case FORM_SUB_FAIL:
-      return {
-        ...state,
-        formFail: action.payload,
-      };
-    case SET_MODAL_SHOW_UNSHOW_STATE:
-      return {
-        ...state,
-        showModal: action.payload
-      };
-    case SET_DELETE_MODAL_SHOW_UNSHOW_STATE:
-      return {
-        ...state,
-        showDeleteModal: action.showState,
-        id: action.id
-      };
-    case SET_MARK_AS_UPDATE_SHOW_UNSHOW_STATE:
-      return {
-        ...state,
-        showMarkAsUpdateModal: action.showState,
-        id: action.id,
-        comTxt: action.comTxt
-      };
+    case UPDATE_TIMESTAMP:
+      const rowInfo = action.payload;
+      const updateObject = (key, pastEventsCopy,arr) =>{
+        const obj = {...pastEventsCopy[rowInfo.rowIndex]};
+          obj.createdOn = rowInfo.timeStamp;
+          const upcoming_events =[...state[key],obj];
+          return {
+            ...state,
+            past_events:arr,
+            [key]: upcoming_events
+          };  
+      }
+      const updateTheTimeStamp = (pastEventsCopy, eventType) =>{
+        pastEventsCopy[rowInfo.rowIndex].createdOn = rowInfo.timeStamp;
+        return {
+          ...state,
+         [eventType]:pastEventsCopy
+        };  
+      }
+      const getEventType = (eventType) =>{
+        const pastEventsCopy= [...state[eventType]];
+        const diff = getFormattedDate(rowInfo.timeStamp).daysDiff;
+        const arr = [...pastEventsCopy.slice(0,rowInfo.rowIndex), ...pastEventsCopy.slice(rowInfo.rowIndex + 1)]; 
+
+        if(diff>0){
+          if(eventType === "past_events"){
+            return updateTheTimeStamp(pastEventsCopy,eventType)
+          }
+          if(eventType === "upcoming_events"){
+            const obj = {...pastEventsCopy[rowInfo.rowIndex]};
+            obj.createdOn = rowInfo.timeStamp;
+            const past_events =[...state["past_events"],obj];
+            return {
+              ...state,
+              past_events:past_events,
+              upcoming_events:arr
+            };  
+          }
+          return updateObject("past_events",pastEventsCopy,arr);
+          //past_events
+        }if(diff<0){
+          //future_events
+          if(eventType === "upcoming_events"){
+            return updateTheTimeStamp(pastEventsCopy,eventType)
+          }
+          return updateObject("upcoming_events",pastEventsCopy,arr);
+        } else {
+          //live Comapaign
+          if(eventType === "live_events"){
+            return updateTheTimeStamp(pastEventsCopy,eventType)
+          }
+          if(eventType === "upcoming_events"){
+            const obj = {...pastEventsCopy[rowInfo.rowIndex]};
+            obj.createdOn = rowInfo.timeStamp;
+            const past_events =[...state["live_events"],obj];
+            return {
+              ...state,
+              live_events:past_events,
+              upcoming_events:arr
+            };  
+          }
+          const obj = { ...pastEventsCopy[rowInfo.rowIndex] };
+          obj.createdOn = rowInfo.timeStamp;
+          const live_events = [...state["live_events"], obj];
+          return {
+            ...state,
+            past_events: arr,
+            live_events: live_events
+          }
+        }
+      }
+      
+      if(rowInfo.tabIndex === 2 ){
+        return getEventType("past_events");
+      }
+      else if(rowInfo.tabIndex === 1 ){
+        return getEventType("live_events");
+      }
+      else{
+        return getEventType("upcoming_events");
+      }
+     
+     
+    
+   /*    if(rowInfo.tabIndex === 2 ){
+        const eventType="past_events"
+        const pastEventsCopy= [...state[eventType]];
+        const diff = getFormattedDate(rowInfo.timeStamp).daysDiff;
+        const arr = [...pastEventsCopy.slice(0,rowInfo.rowIndex), ...pastEventsCopy.slice(rowInfo.rowIndex + 1)]; 
+        if(diff>0){
+          //past_events
+          pastEventsCopy[rowInfo.rowIndex].createdOn = rowInfo.timeStamp;
+          return {
+            ...state,
+            past_events:past_events,
+          };  
+        }if(diff<0){
+          //future_events
+          const obj = {...pastEventsCopy[rowInfo.rowIndex]};
+          obj.createdOn = rowInfo.timeStamp;
+          const upcoming_events =[...state.upcoming_events,obj];
+          return {
+            ...state,
+            past_events:arr,
+            upcoming_events: upcoming_events
+          };  
+        } else {
+          //live Comapaign
+          const obj = { ...pastEventsCopy[rowInfo.rowIndex] };
+          obj.createdOn = rowInfo.timeStamp;
+          const live_events = [...state["live_events"], obj];
+          return {
+            ...state,
+            past_events: arr,
+            live_events: live_events
+          }
+        }
+      }
+         */
+    
+   
     default:
       return state;
   }
