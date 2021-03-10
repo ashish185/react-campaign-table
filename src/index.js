@@ -5,9 +5,10 @@ import { Provider } from "react-redux";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import campaignReducer from "./Store/campaign-reducer";
 import MainCompaignPage from "./Containers/MainCompaignPage";
+
 const data1=[
 {
-  "name": "Test Whatsapp",
+  "name": "Super man",
   "region": "US",
   "createdOn": 1559807714999,
   "price": "Price info of Test Whatsapp",

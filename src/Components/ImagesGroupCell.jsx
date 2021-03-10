@@ -71,6 +71,7 @@ function ImagesGroupCell({ tabIndex, rowIndex, rowData, updateTimeStamp }) {
       </MuiPickersUtilsProvider>
     </Popover>
   }
+
   return (
     <span className={"images-group"}>
       <ImageWithName
@@ -98,7 +99,10 @@ const ImageWithName = ({ src, alt, name, handleIconClick = null }) => {
   }
   return (
     <div className="image-with-label" >
-      <img src={src} onClick={(e) => handleClick(e)} alt={alt} className={"margin-right"} />
+      <img src={src}
+        onClick={(e) => handleClick(e)}
+        alt={alt}
+        className={"margin-right"} />
       <span>
         {name}
       </span>

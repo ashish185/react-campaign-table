@@ -8,6 +8,7 @@ import { setData } from '../Store/actions';
 const MainCompaignPage = ({ data, setData }) => {
   useEffect(() => {
     setData(data)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   return (
     <div>
@@ -15,7 +16,7 @@ const MainCompaignPage = ({ data, setData }) => {
       <DemoTabs />
     </div>
   );
-};
+}
 function mapStateToProps(state) {
   return {
     tableData: state.tableData,
