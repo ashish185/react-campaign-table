@@ -11,7 +11,7 @@ import { Constants } from '../string-constants.js';
 import "./../Containers/campaign-table.css";
 import { getFormattedDate } from '../utility-functions.js';
 import ImagesGroupCell from './ImagesGroupCell.jsx';
-import SimpleModal from './Modal.jsx';
+import DialogBox from './DialogBox.jsx';
 
 
 const useStyles = makeStyles({
@@ -106,7 +106,7 @@ export default function BasicTable({ data, tabIndex }) {
           </TableBody>
         </Table>
       </TableContainer>
-      {openPopUp && < SimpleModal
+      {openPopUp && < DialogBox
         show={openPopUp}
         rowData={rowData}
         handleClosePopUp={handleClosePopUp} />}
